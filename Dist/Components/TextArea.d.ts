@@ -22,6 +22,6 @@ export declare class TextArea extends BaseComponent<TextAreaProps, {
         allowLineBreaks: boolean;
         useEscape: boolean;
     };
-    root: HTMLTextAreaElement | null;
+    root: HTMLTextAreaElement | n;
     render(): React.JSX.Element;
 }

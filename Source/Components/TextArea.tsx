@@ -49,7 +49,7 @@ export type TextAreaProps = {
 export class TextArea extends BaseComponent<TextAreaProps, {editedValue: string|n, minHeight: number}> {
 	static defaultProps = {enabled: true, editable: true, allowLineBreaks: true, useEscape: true};
 
-	root: HTMLTextAreaElement | null;
+	root: HTMLTextAreaElement|n;
 	render() {
 		var {value, defaultValue, enabled, editable, className, style, pattern, onChange, instant, useEscape, autoSize, autoSize_minHeight, allowLineBreaks, onKeyDown, title, ...rest} = this.props;
 		var {editedValue, minHeight} = this.state;
