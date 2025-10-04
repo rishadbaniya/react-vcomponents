@@ -48,8 +48,8 @@ export type TextAreaProps = {
 @ApplyBasicStyles
 export class TextArea extends BaseComponent<TextAreaProps, {editedValue: string|n, minHeight: number}> {
 	static defaultProps = {enabled: true, editable: true, allowLineBreaks: true, useEscape: true};
-	
-	root: typeof TextAreaAutoSize | HTMLTextAreaElement;
+
+	root: HTMLTextAreaElement | null;
 	render() {
 		var {value, defaultValue, enabled, editable, className, style, pattern, onChange, instant, useEscape, autoSize, autoSize_minHeight, allowLineBreaks, onKeyDown, title, ...rest} = this.props;
 		var {editedValue, minHeight} = this.state;
@@ -63,7 +63,7 @@ export class TextArea extends BaseComponent<TextAreaProps, {editedValue: string|
 		let Comp: any = autoSize ? TextAreaAutoSize : "textarea"; // todo: add more meaningful typing
 
 		const {css} = cssHelper(this);
-		return <Comp {...rest} ref={c=>this.root = c} title={title ?? undefined} disabled={enabled != true} readOnly={!editable} className={classnames("simpleText selectable", className, autoSize_minHeight && "autoSize_minHeight")}
+		return <Comp {...rest} ref={(c)=>{this.root = c}} title={title ?? undefined} disabled={enabled != true} readOnly={!editable} className={classnames("simpleText selectable", className, autoSize_minHeight && "autoSize_minHeight")}
 			style={css(
 				styles.root,
 				autoSize && {
@@ -79,7 +79,7 @@ export class TextArea extends BaseComponent<TextAreaProps, {editedValue: string|
 					this.SetState({minHeight: height});
 				}
 			}}}
-			value={editedValue != null ? editedValue : value} defaultValue={defaultValue} 
+			value={editedValue != null ? editedValue : value} defaultValue={defaultValue}
 			onChange={e=> {
 				var newVal = e.target.value;
 				if (!allowLineBreaks) newVal = newVal.replace(/[\r\n]/g, "");
@@ -87,8 +87,16 @@ export class TextArea extends BaseComponent<TextAreaProps, {editedValue: string|
 
 				if (pattern) {
 					let valid = newVal.length ? newVal.match(pattern) != null : !this.props.required;
-					if (this.DOM && this.DOM["setCustomValidity"]) {
-						this.DOM["setCustomValidity"](valid ? "" : "Please match the requested format.");
+					let dom;
+					if (this.root instanceof HTMLTextAreaElement) {
+						dom = this.root as HTMLTextAreaElement;
+					} else {
+						dom = this.root
+					}
+					//else if (this.root && (this.root as any).textAreaRef) dom = (this.root as any).textAreaRef.current as HTMLTextAreaElement;
+					//else dom = null;
+					if (this.root && this.root["setCustomValidity"]) {
+						this.root["setCustomValidity"](valid ? "" : "Please match the requested format.");
 					}
 				}
 
