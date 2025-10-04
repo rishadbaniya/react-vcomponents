@@ -61,7 +61,7 @@ let TextArea = class TextArea extends BaseComponent {
         //let Comp: React.DetailedHTMLFactory<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> = autoSize ? TextAreaAutoSize : "textarea";
         let Comp = autoSize ? TextAreaAutoSize : "textarea"; // todo: add more meaningful typing
         const { css } = cssHelper(this);
-        return React.createElement(Comp, Object.assign({}, rest, { ref: (c) => { this.root = c; }, title: title !== null && title !== void 0 ? title : undefined, disabled: enabled != true, readOnly: !editable, className: classnames("simpleText selectable", className, autoSize_minHeight && "autoSize_minHeight"), style: css(styles.root, autoSize && {
+        return React.createElement(Comp, Object.assign({}, rest, { ref: c => { this.root = c; }, title: title !== null && title !== void 0 ? title : undefined, disabled: enabled != true, readOnly: !editable, className: classnames("simpleText selectable", className, autoSize_minHeight && "autoSize_minHeight"), style: css(styles.root, autoSize && {
                 resize: "none",
                 overflow: "hidden", // this is done to prevent measuring issues?
                 //overflowWrap: null,
@@ -77,13 +77,6 @@ let TextArea = class TextArea extends BaseComponent {
                     return; // if no text change, ignore event
                 if (pattern) {
                     let valid = newVal.length ? newVal.match(pattern) != null : !this.props.required;
-                    let dom;
-                    if (this.root instanceof HTMLTextAreaElement) {
-                        dom = this.root;
-                    }
-                    else {
-                        dom = this.root;
-                    }
                     //else if (this.root && (this.root as any).textAreaRef) dom = (this.root as any).textAreaRef.current as HTMLTextAreaElement;
                     //else dom = null;
                     if (this.root && this.root["setCustomValidity"]) {
